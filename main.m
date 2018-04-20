@@ -152,6 +152,11 @@ xlim([0 1])
 increaseSize(fig)
 formatplot(fig)
 
+%% Live Demo
+% run the live demo
+load('./liveDemo/demoData.mat')
+liveDemo(data, fs, curveData_matrix, curveData_bestFeature)
+
 %% Lasso Analysis
 % script
 lassoAnalysis
