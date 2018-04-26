@@ -26,7 +26,7 @@ classdef OperatingCharacteristicCurve < matlab.mixin.Copyable
             if ~isequal(size(sensitivity), size(falseAlarmRate))
                 error('Inputs do not have same size.')
             end % if
-                       
+
             obj.Sensitivity = sensitivity(:);
             obj.FalseAlarmRate = falseAlarmRate(:);
             obj.ThresholdFactor = threshold(:);
@@ -116,7 +116,8 @@ classdef OperatingCharacteristicCurve < matlab.mixin.Copyable
                 upperBound = 1;
             end
             
-            index = find(obj.FalseAlarmRate <= upperBound);
+            
+            index = find(obj.FalseAlarmRate <= upperBound & obj.FalseAlarmRate > 0);
             falseAlarmRate = obj.FalseAlarmRate(index);
             sensitivity = obj.Sensitivity(index);
             

@@ -96,7 +96,7 @@ classdef (Abstract) FeatureCalculation < matlab.mixin.Copyable
         FalseAlarms % Number of false alarms
         ThresholdCrossings % Number of times the feature value exceeded the threshold
         FalseAlarmRate % Number of false alarms per hour
-        MissedSeizures % Numeration of seizure that were not detected
+        MissedSeizures % Enumeration of seizure that were not detected
         BitSeizureDetected % Logical array, index i is true when seizure i is detected by this feature, false otherwise 
         ThresholdCrossedLocation % Indices where the feature value crossed the threshold, in terms of feature samples
         FalseAlarmLocation % Indices of false alarms, in terms of feature samples
@@ -536,8 +536,9 @@ classdef (Abstract) FeatureCalculation < matlab.mixin.Copyable
         end % function calculateOperatingCharacteristicCurve
         
         function isSeizure = getBitIsSeizure(obj)
-            % return a logical array that is true at index i if that index
-            % corresponds to a seizure
+            % return a logical array of the same length as the value 
+            % that is true at index i if that index corresponds to a 
+            % seizure
             
             isSeizure = false(obj.Length, 1);
             for k = 1:obj.NumSeizures

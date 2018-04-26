@@ -1,6 +1,7 @@
 % generate good looking plots for presentations
 
 lim = [7.728 7.7375]*10^4;
+lim = [lim(1)-10*60 lim(2)+10*60];
 position = [1 1 1440*0.9 900*0.6];
 
 load('/Users/paul/Google Drive/Microchip_Biosignal_Computation/Seizure_Data/Study_005/Study_005_channel1.mat')
@@ -248,7 +249,7 @@ close(fig)
 
 %% Plot weighted detection
 
-mdOLS = MatrixDetection_LinearRegression(matrix);
+mdOLS = MatrixDetection_LinearRegression(matrix, 'Name', 'Weighted Sum Detection');
 mdOLS.CalculationFunctionHandle = @(X, y) (X'*X + 0.01*eye(size(X'*X)))\X'*y;
 mdOLS.calculateWeights();
 mdOLS.calculate();
@@ -271,13 +272,15 @@ delete(fig)
 
 %% Plot Curve
 
-[h, ax] = mdOLS.CharacteristicCurve.plot('Weighted Matrix Detection');
-matrix.bestFeature().CharacteristicCurve.addCurve(h);
+[h, ax] = mdOLS.CharacteristicCurve.plot('Weighted sum detection');
+matrix.bestFeature().CharacteristicCurve.addCurve(h, 'Best single feature');
 ax.Children(1).LineStyle = '--';
 
 title('Sensitivity vs. false alarm rate');
 increaseSize(h, 'LineWidth', 1.5);
 formatplot(h, 'LeftMargin', 0.08, 'BottomMargin', 0.12, 'TopMargin', 0.12);
 ax.XLim = [0 1];
-export_fig('sensitivity_plot', '-jpg')
+h.Color = 'w';
+export_fig('sensitivity_plot', '-jpg', '-m2')
+export_fig('sensitivity_plot', '-pdf')
 delete(h)

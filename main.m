@@ -121,6 +121,9 @@ mdOLS.plotWeightedDetection('Threshold', 'Mark')
 [h, ax] = mdOLS.CharacteristicCurve.plot();
 matrix.bestFeature().CharacteristicCurve.addCurve(h);
 
+% get detection latency
+mdOLS.calculateDetectionLatency();
+
 %% CrossValidate Matrix
 numFolds = 4;
 [curves_training, curves_validation] = MatrixCrossValidation(matrix, 15, numFolds);

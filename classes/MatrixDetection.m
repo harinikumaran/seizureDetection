@@ -10,7 +10,7 @@ classdef MatrixDetection < handle
     % to a threshold to detect seizures.
     %
     % Some parts of this object are similar to the FeatureCalculation
-    % object, becauser in a sense they are similar, expect that the
+    % object, becauser in a sense they are similar, except that the
     % threshold here is a constant (no baseline) and the value is a 
     % weighted sum
     %
@@ -76,7 +76,7 @@ classdef MatrixDetection < handle
             defaultCostSensitivity = 50;
             defaultCostFalseAlarmRate = 1;
             defaultName = 'Generic Matrix Detection';
-            defaultThresholdFactorValues = 0:0.05:100;
+            defaultThresholdFactorValues = [];
             
             p = inputParser;
             p.KeepUnmatched = true;
@@ -140,7 +140,9 @@ classdef MatrixDetection < handle
             
             % calculate operating characteristic curve
             obj.calculateOperatingCharacteristicCurve();
-                     
+            
+            % find best threshold
+            obj.findBestThreshold();         
         end % function calculate
                 
         function weightedDetection(obj, varargin)
@@ -164,11 +166,15 @@ classdef MatrixDetection < handle
             bitDetected = false(numSeizures, 1);
             isSeizure = false(feature.Length, 1);
             
-            % mark seizure as detected if at least one value is above
-            % threshold
+            % find locations where the threshold is crossed
+            aboveThreshold = obj.Value > obj.Threshold;
+            thresholdCrossed = [diff(aboveThreshold) == 1; false];  % is true when the threshold was crossed between this and the previous sample
+            
+            % mark seizure as detected if at least one value in that
+            % seizure crossed the threshold
             for k = 1:numSeizures
                 indexSeizure = obj.SeizureStart(k):obj.SeizureEnd(k);
-                if any(obj.Value(indexSeizure) > obj.Threshold)
+                if any(thresholdCrossed(indexSeizure))
                     bitDetected(k) = true;
                 end % if
                 
@@ -177,10 +183,7 @@ classdef MatrixDetection < handle
             end % for k
             sensitivity = sum(bitDetected)/numSeizures;   
             
-            % find locations where the threshold is crossed
-            aboveThreshold = obj.Value > obj.Threshold;
-            
-            thresholdCrossed = [diff(aboveThreshold) == 1; false];  % is true when the threshold was crossed between this and the previous sample
+
             thresholdCrossed(isSeizure) = false;
             
             thresholdCrossings = sum(thresholdCrossed);
@@ -387,9 +390,6 @@ classdef MatrixDetection < handle
             % i.e. the resuls will be a [featureLength x 1] matrix/vector
             obj.Value = transpose(reshape(obj.LinkedMatrix.FlagMatrix, obj.NumElements, obj.FeatureLength))*obj.WeightMatrix(:);
             
-            % normalize to values between 0 and 100
-            obj.Value = obj.Value*100/max(obj.Value);
-            
         end % function
         
         function rankFeatures(obj)
@@ -422,6 +422,36 @@ classdef MatrixDetection < handle
             end % try
         end % function rankFeatures
         
+        function latency = calculateDetectionLatency(obj)
+            % calculate average detection latency in seconds
+            
+            % find locations where the threshold is crossed
+            aboveThreshold = obj.Value > obj.Threshold;
+            
+            latency_samples = zeros(obj.NumSeizures, 1);
+            
+            % for every seizure, find the first index where the threshold
+            % is crossed (if any)
+            for k = 1:obj.NumSeizures
+                bits = aboveThreshold(obj.SeizureStart(k):obj.SeizureEnd(k));
+                index = find(bits, 1, 'first');
+                if ~isempty(index)
+                    latency_samples(k) = index;
+                else
+                    latency_samples(k) = NaN;
+                end % if
+            end
+            
+            % convert to seconds and take the mean
+            latency = latency_samples*(obj.LinkedMatrix.Matrix{1}.StepSize/obj.LinkedMatrix.Matrix{1}.MeasurementFs);
+            
+            fprintf('** Detections latency:\n')
+            fprintf('Mean: %.4f seconds.\n', mean(latency, 'omitnan'))
+            fprintf('Median: %.4f seconds.\n', median(latency, 'omitnan'))
+            fprintf('Standard deviation: %.4f seconds.\n', std(latency, 'omitnan'))
+           
+        end % function calculateAverageDetectionLatency
+        
         function calculateOperatingCharacteristicCurve(obj)
             % calculate the receiving operating characteristive curve of
             % this feature by sweeping through multiple threshold values
@@ -431,7 +461,15 @@ classdef MatrixDetection < handle
             timeElapsed = tic;
             fprintf('Calculating operating characteristics...\n')
             
-            thresholdFactorValues = obj.ThresholdFactorValues;
+            if ~isempty(obj.ThresholdFactorValues)
+                thresholdFactorValues = obj.ThresholdFactorValues;
+            else
+                % no sweep values specified, go from 0 to max in 100
+                % steps
+                startValue = 0;
+                endValue = max(obj.Value(obj.LinkedMatrix.Matrix{1}.getBitIsSeizure));
+                thresholdFactorValues = linspace(startValue, endValue, 100);
+            end % if
             sensitivity = zeros(size(thresholdFactorValues));
             falseAlarmRate = zeros(size(thresholdFactorValues));
           
@@ -464,7 +502,6 @@ classdef MatrixDetection < handle
             
             fprintf('%s operating characteristic calculated in %.2f seconds.\n', obj.Name, toc(timeElapsed));
             
-            obj.findBestThreshold();
         end % function calculateOperatingCharacteristicCurve
         
     end % methods

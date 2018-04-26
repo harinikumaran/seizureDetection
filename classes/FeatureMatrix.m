@@ -178,7 +178,7 @@ classdef FeatureMatrix < matlab.mixin.Copyable
             end
             
             if isempty(obj.AreaMatrix)
-                obj.fillMatrices();
+                obj.fillAreaMatrix();
             end % if
             
             [~, I] = sort(obj.AreaMatrix(:), 'descend'); % sort areas from best to worst
@@ -198,7 +198,7 @@ classdef FeatureMatrix < matlab.mixin.Copyable
             % or 'feature', second should be the index of the
             % feature/channel to plot. Further input arguments can be
             % entered to costumize how the plot looks. Possibilities:
-            % 'Threshold', 'Bare', 'Mark'
+            % 'Threshold', 'Bare', 'Mark', 'Baseline'
             
             if strcmp(strWhat, 'channel')
                 if index > obj.NumChannels
@@ -239,6 +239,7 @@ classdef FeatureMatrix < matlab.mixin.Copyable
             % format the plot
             if bitBare
                 formatplot(h, 'TopMargin', 0.01, 'LeftMargin', 0.01, 'BottomMargin', 0.01, 'RightMargin', 0.01, 'Gap', 0.005);
+                ax(end).XTickLabel = [];
             else
                 formatplot(h, 'TopMargin', 0.01, 'Gap', 0.002, 'LegendOutside', true);
                 xlabel(ax(end), 'Time [s]');

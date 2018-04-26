@@ -1,0 +1,72 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% for figures
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption} % for subfigures and subtables
+
+\usepackage{longtable} % for tables that can span more than one page
+
+% for colors
+\usepackage{xcolor}
+
+% for graphs with tikz
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning} % widely used tikz libraries
+
+% for email link
+\usepackage{hyperref}
+
+% For Math
+\usepackage{amsmath, amssymb, textcomp}
+\numberwithin{equation}{section} % number equations by sections
+
+% enumitem 
+\usepackage{enumitem}  
+
+% Multiple columns
+\usepackage{multicol}
+
+% custom footer
+\usepackage{fancyhdr}
+\usepackage{lastpage} % get number of last page
+
+% custom section header
+\usepackage{titlesec}
+
+% Change margins
+\usepackage{geometry}
+\geometry{includefoot,
+left = 1.5cm, right = 1.5cm,
+top = 1.5cm, bottom = 1cm}
+
+% custom title
+\makeatletter
+\renewcommand*{\maketitle}{%
+% Title
+\begin{center}
+	\begin{tikzpicture}
+	\node[draw, rectangle, rounded corners = 10pt, inner sep = 6 pt, text width = 0.8\textwidth, text centered, fill=black!10!white] {\huge \@title};
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm} % add some vertical space
+}%
+\makeatother
+
+% define email macro
+\makeatletter
+\newcommand*{\email}[1]{\def\@email{#1}}
+\makeatother
+
+% define custom footer
+\makeatletter
+\pagestyle{fancy}
+\fancyfoot[C]{\footnotesize \@title, \@email, page \thepage/\pageref{LastPage}}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\makeatother
+
+% no indents
+\setlength\parindent{0pt}
