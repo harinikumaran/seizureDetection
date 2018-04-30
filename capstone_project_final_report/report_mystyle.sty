@@ -1,0 +1,73 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% for email link
+\usepackage{hyperref}
+
+% bibliography
+\usepackage{apacite}
+
+% for figures
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption} % for subfigures and subtables
+
+% for colors
+\usepackage{xcolor}
+
+% for graphs with tikz
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning} % widely used tikz libraries
+
+% For Math
+\usepackage{amsmath, amssymb, textcomp}
+\numberwithin{equation}{section} % number equations by sections
+
+% enumitem 
+\usepackage{enumitem}  
+
+% Multiple columns
+\usepackage{multicol}
+
+% custom footer
+\usepackage{fancyhdr}
+\usepackage{lastpage} % get number of last page
+
+% custom section header
+\usepackage{titlesec}
+
+% Change margins
+\usepackage{geometry}
+\geometry{includefoot,
+left = 2.55cm, right = 2.55cm,
+top = 2cm, bottom = 1.5cm}
+
+% custom title
+\makeatletter
+\renewcommand*{\maketitle}{%
+% Title
+\begin{center}
+	\begin{tikzpicture}
+	\node[draw, rectangle, rounded corners = 10pt, inner sep = 6 pt, text width = 0.9\textwidth, text centered, fill=black!10!white] {\huge \@title};
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm} % add some vertical space
+}%
+\makeatother
+
+% define email macro
+\makeatletter
+\newcommand*{\email}[1]{\def\@email{#1}}
+\makeatother
+
+% define custom footer
+\makeatletter
+\pagestyle{fancy}
+\fancyfoot[C]{\footnotesize \@title, page \thepage/\pageref{LastPage}}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\makeatother
+
+% no indents
+\setlength\parindent{0pt}
