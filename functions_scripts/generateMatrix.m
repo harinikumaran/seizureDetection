@@ -7,7 +7,7 @@ savename = 'Matrix';
 % files should be named sequencially by channel
 % truncated path name, the only thing that should be missing is the channel
 % number (and the .mat extension) - it will be added in the loop
-filename_truncated = '/Users/paul/Google Drive/Microchip_Biosignal_Computation/Seizure_Data/Study_005/Study_005_channel';
+filename_truncated = 'Study_005_channel';
 
 % number of channels
 numChannels = 16;

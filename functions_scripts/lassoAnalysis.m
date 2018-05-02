@@ -5,7 +5,7 @@
 % potentially save power
 
 %% Load data
-matrixpath = '/Users/paul/Google Drive/Microchip_Biosignal_Computation/Seizure_Data/Matrices/Study_005_matrix.mat';
+matrixpath = '/Matrices/Study_005_matrix.mat';
 load(matrixpath)
 
 %% Generate feature matrix and target vector

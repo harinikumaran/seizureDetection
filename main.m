@@ -4,8 +4,8 @@
 %% Download iEEG measurement from iEEG.org
 
 channel = 4; % channel number to dowlaod
-loginName = 'paul_meyerra';
-loginBin = '/Users/paul/Documents/MATLAB/pau_ieeglogin.bin';
+loginName = 'login_name';
+loginBin = 'ieeglogin.bin';
 studyName = 'Study 005';
 
 % download the iEEG data and store it in a measurement object
@@ -31,8 +31,8 @@ measurement.plot()
 %% Download data in a loop and save it
 
 numChannels = 16;
-loginName = 'paul_meyerra';
-loginBin = '/Users/paul/Documents/MATLAB/pau_ieeglogin.bin';
+loginName = 'login_name';
+loginBin = 'ieeglogin.bin';
 studyName = 'Study 005';
 savename_truncated = 'Study_005_channel';
 for channel = 1:numChannels
@@ -94,7 +94,7 @@ lineLength.CharacteristicCurve.addCurve(h, 'Legend String 2'); % add a plot to e
 generateMatrix
 
 % or just load it
-matrixPath = '/Users/paul/Google Drive/Microchip_Biosignal_Computation/Seizure_Data/Matrices/Study_005_matrix.mat';
+matrixPath = 'Study_005_matrix.mat';
 load(matrixPath)
 
 % plot one channel or one feature of the matrix
