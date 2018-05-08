@@ -10,6 +10,8 @@ studyName = 'Study 005';
 
 % download the iEEG data and store it in a measurement object
 measurement = IEEG_getData(studyName, channel, loginName, loginBin); 
+% the IEEG_getData function required the iEEG.org MATLAB toolbox
+% https://main.ieeg.org/?q=node/29
 
 % downsample measurement
 measurement.downsample(2)

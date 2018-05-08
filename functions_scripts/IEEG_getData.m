@@ -3,6 +3,9 @@ function measurement = IEEG_getData(studyName, channel, loginName, loginBin)
 % be used by my featureEvaluation script
 % please refer to the iEEG matlab toolbox documentation for more details on
 % how to download data from the iEEG.org website
+%
+% This function requires the iEEG.org MATLAB toolbox available at
+% https://main.ieeg.org/?q=node/29
 
 session = IEEGSession(studyName, loginName, loginBin);
 dataset = session.data;
